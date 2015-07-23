@@ -1,15 +1,32 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
-
 makeCacheMatrix <- function(x = matrix()) {
-
+        y <- NULL
+        getMx <- function() x
+        ## getMx - return matrix that was passed to makeCacheMatrix
+        getInvMx <- function() y 
+        ## getInvMx - return inverse matrix from parent environment
+        setInvMx <- function(InvMx) y <<- InvMx
+        ## getInvMx - set inverse matrix in the parent environment
+        list(getMx = getMx, getInvMx = getInvMx, setInvMx = setInvMx)
+        ## result is the list of four functions
 }
 
 
-## Write a short comment describing this function
-
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        InvMx <- x$getInvMx()
+        ## retrieve invesed matrix
+        if(!is.null(InvMx)) {
+                ## if it exists...
+                message("getting cached data")
+                ## then tell me about it...
+                return(InvMx)
+                ## and return cashed matrix
+        }
+        data <- x$getMx()
+        ## If not, retrieve initial matrix...
+        InvMx <- solve(data, ...)
+        ## inverse it...
+        x$setInvMx(InvMx)
+        ## and add to cache.
+        InvMx
+        ##  Finally, return a matrix that is the inverse of 'x'.
 }
